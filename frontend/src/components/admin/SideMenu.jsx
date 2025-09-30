@@ -1,20 +1,24 @@
-import { 
-  FaHome, FaShoppingCart, FaPhone, FaTasks, FaSuitcase, 
-  FaDollarSign, FaComments, FaEnvelope, FaCalendarAlt, 
-  FaProjectDiagram, FaUsers 
+import {
+  FaHome, FaShoppingCart, FaPhone, FaTasks, FaSuitcase,
+  FaDollarSign, FaComments, FaEnvelope, FaCalendarAlt,
+  FaProjectDiagram, FaUsers
 } from "react-icons/fa";
 import { MdOutlineViewTimeline } from "react-icons/md"; // For Gantt chart
+import Link from "next/link";
 
 export default function SideMenu() {
   return (
     <div className="w-64 h-screen bg-white border-r shadow-sm flex flex-col">
- 
+
 
       {/* Home */}
-      <div className="px-4 py-3 text-gray-700 flex items-center gap-3 hover:bg-gray-100 cursor-pointer">
-        <FaHome className="text-lg" />
-        <span>Home</span>
-      </div>
+      <Link href="/admin">
+        <div className="px-4 py-3 text-gray-700 flex items-center gap-3 hover:bg-gray-100 cursor-pointer">
+          <FaHome className="text-lg" />
+          <span className="text-blue-600">Home</span>
+        </div>
+      </Link>
+
 
       {/* Apps section */}
       <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">
@@ -24,12 +28,16 @@ export default function SideMenu() {
       <div className="flex flex-col text-gray-700">
         <div className="px-4 py-2 flex items-center gap-3 hover:bg-gray-100 cursor-pointer">
           <FaShoppingCart className="text-lg" />
-          <span className="text-blue-600">E commerce</span>
+          <span className="">E commerce</span>
         </div>
-        <div className="px-4 py-2 flex items-center gap-3 hover:bg-gray-100 cursor-pointer">
-          <FaPhone className="text-lg" />
-          <span>CRM</span>
-        </div>
+
+        <Link href="/admin/category">
+          <div className="px-4 py-2 flex items-center gap-3 hover:bg-gray-100 cursor-pointer w-full">
+            <FaPhone className="text-lg" />
+            <span>Category</span>
+          </div>
+        </Link>
+
         <div className="px-4 py-2 flex items-center gap-3 hover:bg-gray-100 cursor-pointer">
           <FaTasks className="text-lg" />
           <span>Project management</span>
