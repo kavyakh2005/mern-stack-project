@@ -1,9 +1,9 @@
 "use client"
 import { FiUser, FiLink, FiImage, FiUpload } from "react-icons/fi";
-import { useRef } from "react";
-import { createSlug } from "@/library/helper";
+import { useRef, useState } from "react";
+import { createSlug, notify } from "@/library/helper";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 export default function ModernFormUI() {
   // To Store the data of name which will be used to create slug 
@@ -16,6 +16,7 @@ export default function ModernFormUI() {
     slugRef.current.value = slug
   }
 
+  const [msg, setMsg] = useState("")
 
   function submitHandler(e) {
     e.preventDefault();
@@ -26,14 +27,22 @@ export default function ModernFormUI() {
     axios.post("http://localhost:5000/category/create", data).then(
       (response) => {
         console.log(response.data)
-        router.push("/")
+        notify(response.data.message, response.data.success)
+        if (response.data.success) {
+          nameRef.current.value = ""
+          slugRef.current.value = ""
+        }
       }
     ).catch(
       (error) => {
-        console.log(error.response.data)
+        console.log(error.response?.data || error.message)
+        if (error.response?.data) {
+          setMsg("This Category is Already There")
+        }
       }
     )
   }
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
@@ -56,6 +65,7 @@ export default function ModernFormUI() {
                 className="w-full outline-none text-gray-700"
               />
             </div>
+            <span className="text-red-500">{msg}</span>
           </div>
 
           {/* Slug Field */}
@@ -66,6 +76,7 @@ export default function ModernFormUI() {
               <input
                 type="text"
                 ref={slugRef}
+                disabled
                 placeholder="Enter slug"
                 className="w-full outline-none text-gray-700"
               />

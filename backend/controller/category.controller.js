@@ -15,7 +15,7 @@ const category = {
       if (exitingItem) {
         return res
           .status(500)
-          .json({ message: "categroy already there", succes: false });
+          .json({ message: "categroy already there", success: false });
       }
 
       {/*This is important line for this function*/ }
@@ -27,14 +27,14 @@ const category = {
       await category.save();
       res.status(201).json({
         message: "Category Create",
-        succes: true,
+        success: true,
         timestamp: new Date().toISOString(),
         data: category,
       });
     } catch (error) {
       res.status(500).json({
         message: "Internal Server Error",
-        succes: false,
+        success: false,
       });
     }
   },
@@ -64,7 +64,7 @@ const category = {
     } catch (error) {
       res.status(500).json({
         message: "Internal Server Error",
-        succes: false,
+        success: false,
       });
     }
   },
