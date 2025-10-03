@@ -1,9 +1,16 @@
 const categoryModel = require("../model/category.model");
-const { noContentResponse } = require("../utility/response");
+const { noContentResponse, errorResponse } = require("../utility/response");
+const { createUniqueName } = require("../utility/helper");
 
 const category = {
   async create(req, res) {
     try {
+      const categoryImg = req.files.image;
+      // console.log(categoryImg);
+      // if (!categoryImg) {
+      //   return noContentResponse(res);
+      // }
+
       // if name and slug is not passed by the user to show error for that
       const { name, slug } = req.body;
       if (!name || !slug) {
@@ -14,22 +21,36 @@ const category = {
       const exitingItem = await categoryModel.findOne({ name: name });
       if (exitingItem) {
         return res
-          .status(500)
+          .status(400)
           .json({ message: "categroy already there", success: false });
       }
+      // create a unique name for image
 
-      {/*This is important line for this function*/ }
-      const category = await categoryModel.create({
-        name: name,
-        slug: slug,
-      });
+      const image = createUniqueName(categoryImg.name);
+      // console.log(image);
 
-      await category.save();
-      res.status(201).json({
-        message: "Category Create",
-        success: true,
-        timestamp: new Date().toISOString(),
-        data: category,
+      const destination = "public/images/category/" + image;
+
+      /*This is important code for saving image in database  */
+      categoryImg.mv(destination, async (error) => {
+        if (error) {
+          return res
+            .status(500)
+            .json({ message: "File Not Upload ", success: false });
+        } else {
+          const category = await categoryModel.create({
+            name: name,
+            slug: slug,
+            image: categoryImg.name,
+          });
+          // await category.save();
+          return res.status(201).json({
+            message: "Category Create",
+            success: true,
+            timestamp: new Date().toISOString(),
+            data: category,
+          });
+        }
       });
     } catch (error) {
       res.status(500).json({

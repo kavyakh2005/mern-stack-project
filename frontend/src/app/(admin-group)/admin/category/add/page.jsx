@@ -3,9 +3,11 @@ import { FiUser, FiLink, FiImage, FiUpload } from "react-icons/fi";
 import { useRef, useState } from "react";
 import { createSlug, notify } from "@/library/helper";
 import axios from "axios";
-// import { useRouter } from "next/navigation";
+// import { Router } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function ModernFormUI() {
+  const router = useRouter();
   // To Store the data of name which will be used to create slug 
   const nameRef = useRef();
   const slugRef = useRef();
@@ -13,31 +15,43 @@ export default function ModernFormUI() {
   // Creating Slug with the help of Name 
   function generateSlug() {
     const slug = createSlug(nameRef.current.value);
-    slugRef.current.value = slug
+    if (slugRef.current) {
+      slugRef.current.value = slug;
+    }
   }
 
   const [msg, setMsg] = useState("")
 
   function submitHandler(e) {
     e.preventDefault();
-    const data = {
-      name: nameRef.current.value,
-      slug: slugRef.current.value
+
+    const formData = new FormData()
+    formData.append("name", nameRef.current.value)
+    formData.append("slug", slugRef.current.value)
+    // formData.append("image", e.target.category_image.files[0])
+    if (e.target.category_image.files.length > 0) {
+      formData.append("image", e.target.category_image.files[0]);
     }
-    axios.post("http://localhost:5000/category/create", data).then(
+
+
+    axios.post("http://localhost:5000/category/create", formData).then(
       (response) => {
-        console.log(response.data)
         notify(response.data.message, response.data.success)
         if (response.data.success) {
           nameRef.current.value = ""
           slugRef.current.value = ""
+          router.push("/admin/category")
         }
       }
     ).catch(
       (error) => {
-        console.log(error.response?.data || error.message)
-        if (error.response?.data) {
-          setMsg("This Category is Already There")
+        // console.log(error.response?.data || error.message)
+        console.log(error)
+        notify(error.response?.data?.message || error.message, false)
+        if(error.response?.status == 400){
+          setMsg("Category Already There")  
+        }else {
+        setMsg("All Fields are Required")
         }
       }
     )
@@ -45,8 +59,8 @@ export default function ModernFormUI() {
 
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6 pt-0">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6 pt-0">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
           Create New Entry
         </h2>
@@ -84,19 +98,17 @@ export default function ModernFormUI() {
           </div>
 
           {/* Image Upload */}
-          <div>
-            <label className="block text-gray-600 mb-2 font-medium">Image</label>
-            <div className="border-dashed border-2 border-gray-300 rounded-xl p-4 text-center cursor-pointer hover:border-blue-500 transition">
-              <FiImage className="mx-auto text-3xl text-gray-400" />
-              <p className="text-gray-500 mt-2">Click to upload or drag & drop</p>
-              <div className="mt-3 flex justify-center">
-                <button
-                  type="button"
-                  className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600"
-                >
-                  <FiUpload /> Upload Image
-                </button>
-              </div>
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2 text-gray-700">Image</label>
+            <div className="w-full max-w-md bg-white border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:border-blue-500 transition">
+              <label className="flex flex-col items-center justify-center h-30 cursor-pointer">
+                <FiImage className="text-4xl text-gray-400" />
+                <p className="mt-2 text-gray-500">Click to upload or drag & drop</p>
+                <span className="mt-2 inline-flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
+                  <FiUpload /> Choose File
+                </span>
+                <input type="file" accept="image/*" name="category_image" className="hidden" />
+              </label>
             </div>
           </div>
 

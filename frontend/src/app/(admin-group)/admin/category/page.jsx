@@ -9,8 +9,9 @@ import Link from "next/link";
 
 export default async function CategoryTable() {
   const categoryJSON = await getCategories();
-  // console.log(categoryJSON)
-  const categories = categoryJSON.data
+  console.log(categoryJSON)
+  const categories = categoryJSON.data;
+  console.log(categories)
 
 
 
@@ -41,7 +42,7 @@ export default async function CategoryTable() {
             </tr>
           </thead>
           <tbody>
-            {categories.map((cat, idx) => (
+            {categories?.map((cat, idx) => (
               <tr
                 key={cat._id}
                 className={`${idx % 2 === 0 ? "bg-white" : "bg-gray-50"
