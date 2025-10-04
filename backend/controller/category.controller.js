@@ -1,6 +1,11 @@
 const categoryModel = require("../model/category.model");
-const { noContentResponse, errorResponse } = require("../utility/response");
+const {
+  noContentResponse,
+  errorResponse,
+  deletedResponse,
+} = require("../utility/response");
 const { createUniqueName } = require("../utility/helper");
+const fs = require("fs");
 
 const category = {
   async create(req, res) {
@@ -41,7 +46,7 @@ const category = {
           const category = await categoryModel.create({
             name: name,
             slug: slug,
-            image: categoryImg.name,
+            image: image,
           });
           // await category.save();
           return res.status(201).json({
@@ -81,6 +86,45 @@ const category = {
         message: "Category Found ",
         success: true,
         data: category,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Internal Server Error",
+        success: false,
+      });
+    }
+  },
+
+  async deletebyID(req, res) {
+    try {
+      const id = req.params.id;
+      const exitingCat = await categoryModel.findByIdAndDelete(id);
+      // console.log(exitingCat);
+      if (exitingCat) {
+        fs.unlinkSync(`public/images/category/${exitingCat.image}`);
+      }
+      await categoryModel.findByIdAndDelete(id);
+      return res.status(200).json({
+        message: "Category Deleted ",
+        success: true,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Internal Server Error",
+        success: false,
+      });
+    }
+  },
+
+  async status(req, res) {
+    try {
+      const id = req.params.id;
+      const category = await categoryModel.findById(id);
+
+      await categoryModel.findByIdAndUpdate(id, { status: !category.status });
+      return res.status(200).json({
+        message: "Category Status Updated ",
+        success: true,
       });
     } catch (error) {
       res.status(500).json({

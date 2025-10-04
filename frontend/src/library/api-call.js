@@ -1,8 +1,9 @@
 import axios from "axios";
+import { axiosInstance } from "./helper";
 
 async function getCategories() {
   try {
-    const response = await axios.get("http://localhost:5000/category/");
+    const response = await axiosInstance.get("category/");
     if (response.data) {
       return response.data;
     } else {

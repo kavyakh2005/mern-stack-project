@@ -6,14 +6,14 @@ export const metadata = {
 import { getCategories } from "@/library/api-call";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import Link from "next/link";
+import DeleteBtn from "@/components/admin/DeleteBtn";
+import StatusBtn from "@/components/admin/StatusBtn";
 
 export default async function CategoryTable() {
   const categoryJSON = await getCategories();
-  console.log(categoryJSON)
+  // console.log(categoryJSON)
   const categories = categoryJSON.data;
-  console.log(categories)
-
-
+  // console.log(categories)
 
   return (
     <div className="bg-white rounded-2xl shadow p-6">
@@ -51,7 +51,7 @@ export default async function CategoryTable() {
                 <td className="px-4">{idx + 1}</td>
                 <td className="px-4 py-3">
                   <img
-                    src={cat.image}
+                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL}images/category/${cat.image}`}
                     alt={cat.name}
                     className="w-12 h-12 object-cover rounded-md border"
                   />
@@ -61,21 +61,14 @@ export default async function CategoryTable() {
                 </td>
                 <td className="px-4 py-3 text-gray-500">{cat.slug}</td>
                 <td className="px-4 py-3 text-gray-500">
-                  <button className="rounded-md bg-gray-100 px-3 py-1.5 text-xs font-medium hover:bg-gray-200">
-                    {
-                      cat.status ? "Active" : "InActive"
-                    }
-                  </button>
+                  <StatusBtn status={cat.status} id={cat._id}/>
                 </td>
                 <td className="px-4 py-3 text-center">
                   <div className="flex justify-center gap-3">
                     <button className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition">
                       <FaEdit /> <span className="hidden sm:inline">Edit</span>
                     </button>
-                    <button className="flex items-center gap-1 text-red-600 hover:text-red-800 transition">
-                      <FaTrash />{" "}
-                      <span className="hidden sm:inline">Delete</span>
-                    </button>
+                    <DeleteBtn id={cat._id}/>
                   </div>
                 </td>
               </tr>

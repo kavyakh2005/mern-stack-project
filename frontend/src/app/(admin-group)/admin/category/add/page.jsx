@@ -2,8 +2,8 @@
 import { FiUser, FiLink, FiImage, FiUpload } from "react-icons/fi";
 import { useRef, useState } from "react";
 import { createSlug, notify } from "@/library/helper";
-import axios from "axios";
-// import { Router } from "next/router";
+import { axiosInstance } from "@/library/helper";
+// import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export default function ModernFormUI() {
@@ -34,7 +34,7 @@ export default function ModernFormUI() {
     }
 
 
-    axios.post("http://localhost:5000/category/create", formData).then(
+    axiosInstance.post(`category/create`, formData).then(
       (response) => {
         notify(response.data.message, response.data.success)
         if (response.data.success) {

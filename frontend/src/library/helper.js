@@ -11,4 +11,9 @@ function createSlug(text) {
 import { ToastContainer, toast } from "react-toastify";
 const notify = (msg, flag) => toast(msg, { type: flag ? "success" : "error" });
 
-export { createSlug , notify};
+import axios from "axios";
+const axiosInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+});
+
+export { createSlug , notify , axiosInstance};
