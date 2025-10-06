@@ -61,14 +61,17 @@ export default async function CategoryTable() {
                 </td>
                 <td className="px-4 py-3 text-gray-500">{cat.slug}</td>
                 <td className="px-4 py-3 text-gray-500">
-                  <StatusBtn status={cat.status} id={cat._id}/>
+                  <StatusBtn status={cat.status} id={cat._id} />
                 </td>
                 <td className="px-4 py-3 text-center">
                   <div className="flex justify-center gap-3">
-                    <button className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition">
-                      <FaEdit /> <span className="hidden sm:inline">Edit</span>
-                    </button>
-                    <DeleteBtn id={cat._id}/>
+                    <Link href={`/admin/category/edit/${cat._id}`}>
+                      <button className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition">
+                        <FaEdit /> <span className="hidden sm:inline">Edit</span>
+                      </button>
+                    </Link>
+
+                    <DeleteBtn id={cat._id} />
                   </div>
                 </td>
               </tr>

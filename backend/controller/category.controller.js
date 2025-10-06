@@ -133,6 +133,67 @@ const category = {
       });
     }
   },
+
+  async update(req, res) {
+    try {
+      const id = req.params.id;
+      // console.log(id);
+      // return;
+      const categoryImg = req.files.image || null
+      // console.log(categoryImg);
+      // if (!categoryImg) {
+      //   return noContentResponse(res);
+      // }
+
+      // if name and slug is not passed by the user to show error for that
+      const { name, slug } = req.body;
+
+      // if data is already there and user is trying to create again to show error for that
+      const exitingItem = await categoryModel.findById(id );
+      if (!exitingItem) {
+        return res
+          .status(400)
+          .json({ message: "categroy not Found", success: false });
+      }
+
+      const update = {};
+      if (name) update.name = name;
+      if (slug) update.slug = slug;
+
+      if (categoryImg) {
+        // create a unique name for image
+        const image = createUniqueName(categoryImg.name);
+        // console.log(image);
+        const destination = "public/images/category/" + image;
+
+        /*This is important code for saving image in database  */
+        categoryImg.mv(destination, async (error) => {
+          if (error) {
+            return res
+              .status(500)
+              .json({ message: "File Not Upload ", success: false });
+          } else {
+            fs.unlinkSync(`public/images/category/${exitingItem.image}`);
+            // console.log(update);
+            update.image = image;
+            const category = await categoryModel.findByIdAndUpdate(id, { $set : update }, { new: true });
+            // await category.save();
+            return res.status(201).json({
+              message: "Category updated successfully",
+              success: true,
+              timestamp: new Date().toISOString(),
+              data: category,
+            });
+          }
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        message: "Internal Server Error",
+        success: false,
+      });
+    }
+  },
 };
 
 module.exports = category;
