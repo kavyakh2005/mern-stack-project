@@ -3,6 +3,9 @@ import {
   FaDollarSign, FaComments, FaEnvelope, FaCalendarAlt,
   FaProjectDiagram, FaUsers
 } from "react-icons/fa";
+import { MdCategory } from "react-icons/md";
+import { IoIosColorPalette } from "react-icons/io";
+import { TbBrandBooking } from "react-icons/tb";
 import { MdOutlineViewTimeline } from "react-icons/md"; // For Gantt chart
 import Link from "next/link";
 
@@ -26,26 +29,32 @@ export default function SideMenu() {
       </div>
 
       <div className="flex flex-col text-gray-700">
-        <div className="px-4 py-2 flex items-center gap-3 hover:bg-gray-100 cursor-pointer">
+        {/* <div className="px-4 py-2 flex items-center gap-3 hover:bg-gray-100 cursor-pointer">
           <FaShoppingCart className="text-lg" />
           <span className="">E commerce</span>
-        </div>
+        </div> */}
 
         <Link href="/admin/category">
           <div className="px-4 py-2 flex items-center gap-3 hover:bg-gray-100 cursor-pointer w-full">
-            <FaPhone className="text-lg" />
+            <MdCategory className="text-lg" />
             <span>Category</span>
           </div>
         </Link>
 
-        <div className="px-4 py-2 flex items-center gap-3 hover:bg-gray-100 cursor-pointer">
-          <FaTasks className="text-lg" />
-          <span>Project management</span>
-        </div>
-        <div className="px-4 py-2 flex items-center gap-3 hover:bg-gray-100 cursor-pointer">
-          <FaSuitcase className="text-lg" />
-          <span>Travel agency</span>
-        </div>
+        <Link href="/admin/color">
+          <div className="px-4 py-2 flex items-center gap-3 hover:bg-gray-100 cursor-pointer">
+            <IoIosColorPalette className="text-lg" />
+            <span>Colors</span>
+          </div>
+        </Link>
+
+        <Link href="/admin/brand">
+          <div className="px-4 py-2 flex items-center gap-3 hover:bg-gray-100 cursor-pointer">
+            <TbBrandBooking className="text-lg" />
+            <span>Brands</span>
+          </div>
+        </Link>
+
         <div className="px-4 py-2 flex items-center justify-between hover:bg-gray-100 cursor-pointer">
           <div className="flex items-center gap-3">
             <FaDollarSign className="text-lg" />

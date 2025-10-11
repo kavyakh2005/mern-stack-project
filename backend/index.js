@@ -15,6 +15,12 @@ server.use(cors({origin:"http://localhost:3000"}))
 const categoryRouter = require('../backend/router/category.router')
 server.use('/category',categoryRouter)
 
+const colorRouter = require('../backend/router/color.router')
+server.use('/color',colorRouter)
+
+const brandRouter = require('../backend/router/brand.router')
+server.use('/brand',brandRouter)
+
 server.use(express.static('./public'))
 
 

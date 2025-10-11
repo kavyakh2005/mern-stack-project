@@ -5,10 +5,10 @@ import React, { use } from 'react'
 import { axiosInstance, notify } from "@/library/helper";
 import {useRouter} from 'next/navigation'
 
-export default function DeleteBtn({ id }) {
+export default function DeleteBtn({ id , url}) {
     const router = useRouter();
     function deleteHandler() {
-        axiosInstance.delete(`category/delete/${id}`)
+        axiosInstance.delete(`${url}/delete/${id}`)
             .then((res) => {
                 notify(res.data.message, res.data.success)
                 if (res.data.success) {
