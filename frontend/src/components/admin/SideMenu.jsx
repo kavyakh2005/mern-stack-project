@@ -7,6 +7,7 @@ import { MdCategory } from "react-icons/md";
 import { IoIosColorPalette } from "react-icons/io";
 import { TbBrandBooking } from "react-icons/tb";
 import { MdOutlineViewTimeline } from "react-icons/md"; // For Gantt chart
+import { FaProductHunt } from "react-icons/fa";
 import Link from "next/link";
 
 export default function SideMenu() {
@@ -55,15 +56,12 @@ export default function SideMenu() {
           </div>
         </Link>
 
-        <div className="px-4 py-2 flex items-center justify-between hover:bg-gray-100 cursor-pointer">
-          <div className="flex items-center gap-3">
-            <FaDollarSign className="text-lg" />
-            <span>Stock</span>
+        <Link href="/admin/product">
+          <div className="px-4 py-2 flex items-center gap-3 hover:bg-gray-100 cursor-pointer">
+            <FaProductHunt className="text-lg" />
+            <span>Product</span>
           </div>
-          <span className="bg-yellow-200 text-yellow-800 text-[10px] font-semibold px-2 py-0.5 rounded">
-            NEW
-          </span>
-        </div>
+        </Link>
         <div className="px-4 py-2 flex items-center gap-3 hover:bg-gray-100 cursor-pointer">
           <FaComments className="text-lg" />
           <span>Chat</span>
@@ -93,11 +91,6 @@ export default function SideMenu() {
           <FaUsers className="text-lg" />
           <span>Social</span>
         </div>
-      </div>
-
-      {/* Footer */}
-      <div className="mt-auto px-4 py-3 text-gray-600 text-sm hover:bg-gray-100 cursor-pointer">
-        ⬅ Collapsed View
       </div>
     </div>
   );

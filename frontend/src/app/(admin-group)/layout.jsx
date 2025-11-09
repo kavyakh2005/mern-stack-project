@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
             pauseOnHover
             theme="colored"
           />
-          <SideMenu />
+          <SideMenu/>
           <div className="flex-1 p-2">
             {children}
           </div>

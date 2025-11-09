@@ -7,9 +7,12 @@ import { axiosInstance } from "@/library/helper";
 // import axios from "axios";
 import { useRouter } from "next/navigation";
 import { getCategories } from "@/library/api-call";
+import { use } from "react";
 import { useEffect } from "react";
 
+
 export default function categoryEdit({ params }) {
+  const { category_id } = use(params);
   const [category, setCategory] = useState({});
   const router = useRouter();
   // To Store the data of name which will be used to create slug 
@@ -17,7 +20,7 @@ export default function categoryEdit({ params }) {
   const slugRef = useRef();
 
   async function getcategory() {
-    const categoryJSON = await getCategories(params?.category_id);
+    const categoryJSON = await getCategories(category_id);
     console.log(categoryJSON.data)
     setCategory(categoryJSON.data)
   }
@@ -26,7 +29,7 @@ export default function categoryEdit({ params }) {
     () => {
       getcategory()
     },
-    [params?.category_id]
+    [category_id]
   )
 
 
