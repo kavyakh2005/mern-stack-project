@@ -21,6 +21,9 @@ server.use('/color',colorRouter)
 const brandRouter = require('../backend/router/brand.router')
 server.use('/brand',brandRouter)
 
+const productRouter = require('../backend/router/product.router')
+server.use('/product',productRouter)
+
 server.use(express.static('./public'))
 
 

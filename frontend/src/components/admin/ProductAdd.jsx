@@ -1,6 +1,7 @@
 'use client'
 import { createSlug, axiosInstance, notify } from "@/library/helper";
 import React from "react";
+import Select from 'react-select'
 import {
     FaTag,
     FaDollarSign,
@@ -21,6 +22,9 @@ export default function ProductForm({ category, brand, color }) {
     const router = useRouter();
 
     const [msg, setMsg] = useState("")
+    const [selColors, setSelColors] = useState([])
+    const [selCategory, setSelCategory] = useState(null)
+    const [selBrand, setSelBrand] = useState(null)
 
     const nameRef = useRef();
     const slugRef = useRef();
@@ -47,24 +51,28 @@ export default function ProductForm({ category, brand, color }) {
         e.preventDefault();
 
         const formData = new FormData()
-        
+
         formData.append("name", nameRef.current.value);
         formData.append("slug", slugRef.current.value);
-        formData.append("thumbnail", e.target.thumbnail.files[0]);
-        formData.append("shortDescription", e.target.shortDescription.value);
-        formData.append("longDescription", e.target.description.value);
         formData.append("originalPrice", originalRef.current.value);
         formData.append("dicountPercentage", discountRef.current.value);
         formData.append("finalPrice", finalPriceRef.current.value);
-        // formData.append("categoryID", e.target.categoryID.value);
-        // formData.append("brandId", e.target.brandId.value);
+        formData.append("shortDescription", e.target.shortDescription.value);
+        formData.append("longDescription", e.target.longDescription.value);
+        formData.append("categoryID", selCategory?.value);
+        formData.append("brandId", selBrand?.value);
+        formData.append("colorID", JSON.stringify(selColors))
+        if (e.target.thumbnail.files.length > 0) {
+            formData.append("thumbnail", e.target.thumbnail.files[0]);
+        }
         // formData.append("stock", e.target.stock.value);
         // formData.append("topSelling", e.target.topSelling.checked ? true : false);
         // formData.append("images", e.target.category_image.files[0]);
 
 
-        axiosInstance.post(`product/create`, formData).then(
+        axiosInstance.post('product/create', formData).then(
             (response) => {
+                console.log(response.data)
                 notify(response.data.message, response.data.success)
                 if (response.data.success) {
                     nameRef.current.value = ""
@@ -76,12 +84,20 @@ export default function ProductForm({ category, brand, color }) {
             (error) => {
                 // console.log(error.response?.data || error.message)
                 console.log(error)
-                notify(error.response?.data?.message || error.message, false)
-                if (error.response?.status == 400) {
-                    setMsg("Category Already There")
-                } else {
-                    setMsg("All Fields are Required")
-                }
+                // notify(error.response?.data?.message || error.message, false)
+                // if (error.response?.status == 400) {
+                //     setMsg("Category Already There")
+                // } else {
+                //     setMsg("All Fields are Required")
+                // }
+
+                const msg =
+                    error.response?.data?.message ||
+                    error.message ||
+                    "Something went wrong";
+
+                notify(msg, false);
+                setMsg(msg);
             }
         )
     }
@@ -175,7 +191,7 @@ export default function ProductForm({ category, brand, color }) {
                             ref={finalPriceRef}
                             readOnly
                             placeholder="Final Price"
-                            className="w-full outline-none text-gray-700"
+                            className="w-full outline-none text-gray- cursor-not-allowed"
                         />
                     </div>
                 </div>
@@ -185,49 +201,49 @@ export default function ProductForm({ category, brand, color }) {
                     {/* Category */}
                     <div className="flex items-center border border-gray-300 rounded-lg p-2">
                         <MdOutlineCategory className="text-gray-500 text-xl mr-3" />
-                        <select
+                        <Select
                             name="categoryID"
+                            onChange={setSelCategory}
+                            placeholder="Category"
                             className="w-full outline-none text-gray-700 bg-transparent"
-                        >
-                            <option value="">Select Category</option>
-                            {
-                                category.map((cat, index) => {
-                                    return <option key={index} value={cat._id}>{cat.name}</option>
-                                })
-                            }
-                        </select>
+                            options={category?.map((cat) => ({
+                                value: cat._id,
+                                label: cat.name,
+                            }))} />
                     </div>
 
                     {/* Brand */}
-                    <div className="flex items-center border border-gray-300 rounded-lg p-2">
+                    <div className="flex items-center bord  er border-gray-300 rounded-lg p-2">
                         <FaStore className="text-gray-500 text-xl mr-3" />
-                        <select
-                            name="brandId"
+                        <Select
+                            name="brandID"
+                            onChange={setSelBrand}
+                            placeholder="Brand"
                             className="w-full outline-none text-gray-700 bg-transparent"
-                        >
-                            <option value="">Select Brand</option>
-                            {
-                                brand.map((brand, index) => {
-                                    return <option key={index} value={brand._id}>{brand.name}</option>
-                                })
-                            }
-                        </select>
+                            options={brand?.map((br) => ({
+                                value: br._id,
+                                label: br.name,
+                            }))} />
+
                     </div>
 
                     {/* Color */}
                     <div className="flex items-center border border-gray-300 rounded-lg p-2">
                         <FaPalette className="text-gray-500 text-xl mr-3" />
-                        <select
-                            name="color"
+                        <Select
+                            name="colorID"
+                            onChange={(data) => {
+                                const colorsData = data?.map((item) => item.value)
+                                setSelColors(colorsData)
+                            }}
+                            placeholder="Color"
                             className="w-full outline-none text-gray-700 bg-transparent"
-                        >
-                            <option value="">Select Color</option>
-                            {
-                                color.map((col, index) => {
-                                    return <option key={index} value={col._id}>{col.name}</option>
-                                })
-                            }
-                        </select>
+                            isMulti
+                            closeMenuOnSelect={false}
+                            options={color?.map((col) => ({
+                                value: col._id,
+                                label: col.name,
+                            }))} />
                     </div>
                 </div>
 
@@ -278,7 +294,7 @@ export default function ProductForm({ category, brand, color }) {
                 </div>
 
                 {/* Stock & Top Selling */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex items-center border border-gray-300 rounded-lg p-2">
                         <FaBoxOpen className="text-gray-500 text-xl mr-3" />
                         <input
@@ -295,16 +311,15 @@ export default function ProductForm({ category, brand, color }) {
                             <input name="topSelling" type="checkbox" /> Top Selling
                         </label>
                     </div>
-                </div>
+                </div> */}
 
                 {/* Submit Button */}
                 <button
-                    type="button"
                     className="w-full py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition"
                 >
                     Submit Product
                 </button>
-            </form>
-        </div>
+            </form >
+        </div >
     );
 }

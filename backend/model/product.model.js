@@ -22,7 +22,7 @@ const productSchema = new mongoose.Schema(
     longDescription: {
       type: String,
       required: true,
-      minlength: 50,
+      minlength: 5,
     },
     originalPrice: {
       type: Number,
@@ -64,18 +64,18 @@ const productSchema = new mongoose.Schema(
         type: String,
       },
     ],
-    stock: {
-      type: Number,
-      required: true,
-    },
+    // stock: {
+    //   type: Number,
+    //   required: true,
+    // },
     topSelling: {
       type: Boolean,
       default: false,
     },
-    status: {
-      type: Boolean,
-      default: true,
-    },
+    // status: {
+    //   type: Boolean,
+    //   default: true,
+    // },
   },
   { timestamps: true }
 );

@@ -12,7 +12,7 @@ import StatusBtn from "@/components/admin/StatusBtn";
 export default async function Colorview() {
   const colorJSON = await getColor();
   console.log(colorJSON)
-  const colors = colorJSON.data;
+  const colors = colorJSON?.data;
   // console.log(categories)
 
   return (
