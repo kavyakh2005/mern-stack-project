@@ -8,18 +8,22 @@ import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import Link from "next/link";
 import DeleteBtn from "@/components/admin/DeleteBtn";
 import StatusBtn from "@/components/admin/StatusBtn";
+import StockAvailabilty from "@/components/admin/Stock-Availabilty";
+import TopSelling from "@/components/admin/TopSelling";
+import ProductView from "@/components/admin/Product-View";
+import OtherImages from "@/components/admin/OtherImages";
 
 export default async function ProductTable() {
   const productJSON = await getProducts();
-  // console.log(categoryJSON)
-  const products = productJSON?.data;
-  // console.log(categories)
+  // console.log(productJSON, "productJSON");
+  const products = productJSON.data;
+  // console.log(products , "products")
 
   return (
     <div className="bg-white rounded-2xl shadow p-6">
       {/* Top Section */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
-        <h2 className="text-xl font-bold text-gray-800">Categories</h2>'
+        <h2 className="text-xl font-bold text-gray-800">Products</h2>'
         <Link href="/admin/product/add">
           <button className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
             <FaPlus /> <span className="hidden sm:inline">Add Products</span>
@@ -36,42 +40,54 @@ export default async function ProductTable() {
               <th className="px-4 py-3">S.NO</th>
               <th className="px-4 py-3">Image</th>
               <th className="px-4 py-3">Name</th>
-              <th className="px-4 py-3">Slug</th>
+              <th className="px-4 py-3">FinalPrice</th>
               <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-4">Stock</th>
+              <th className="px-4 py-4">Top-Selling</th>
               <th className="px-4 py-3 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {products?.map((cat, idx) => (
+            {products.map((prod, idx) => (
               <tr
-                key={cat._id}
+                key={prod._id}
                 className={`${idx % 2 === 0 ? "bg-white" : "bg-gray-50"
                   }  transition`}
               >
                 <td className="px-4">{idx + 1}</td>
                 <td className="px-4 py-3">
                   <img
-                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL}images/category/${cat.image}`}
-                    alt={cat.name}
+                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL}images/product/${prod.thumbnail}`}
+                    alt={prod.name}
                     className="w-12 h-12 object-cover rounded-md border"
                   />
                 </td>
                 <td className="px-4 py-3 font-medium text-gray-800">
-                  {cat.name}
+                  {prod.name}
                 </td>
-                <td className="px-4 py-3 text-gray-500">{cat.slug}</td>
+                <td className="px-4 py-3 text-gray-500">{prod.finalPrice}</td>
                 <td className="px-4 py-3 text-gray-500">
-                  <StatusBtn url="/category" status={cat.status} id={cat._id} />
+                  <StatusBtn url='product' status={prod.status} id={prod._id} />
+                </td>
+                <td className="px-4 py-4 text-gray-500">
+                  <StockAvailabilty url='product' stock={prod.stock} id={prod._id} status={prod.status} />
+                </td>
+                <td className="px-4 py-4 text-gray-500">
+                  <TopSelling url='/product' TopSelling={prod.topSelling} id={prod._id} />
                 </td>
                 <td className="px-4 py-3 text-center">
                   <div className="flex justify-center gap-3">
-                    <Link href={`/admin/category/edit/${cat._id}`}>
+                    <Link href={`/admin/product/edit/${prod._id}`}>
                       <button className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition">
                         <FaEdit /> <span className="hidden sm:inline">Edit</span>
                       </button>
                     </Link>
 
-                    <DeleteBtn url="/category" id={cat._id} />
+                    <DeleteBtn id={prod._id} url="/product" />
+                    <ProductView prod={prod} />
+                    <Link href={`/admin/product/images/${prod._id}`}>
+                      <OtherImages />
+                    </Link>
                   </div>
                 </td>
               </tr>

@@ -12,7 +12,7 @@ import Link from "next/link";
 
 export default function SideMenu() {
   return (
-    <div className="w-64 h-screen bg-white  flex flex-col">
+    <div className="w-64 bg-white  flex flex-col">
 
 
       {/* Home */}

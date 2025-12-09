@@ -59,20 +59,38 @@ async function getBrand(id = null) {
 
 async function getProducts(id = null) {
   try {
-    let API = "products";
-    if (id != null) API += `/${id}`;
-    // http://localhost:5000/category/
-    // http://localhost:5000/category/68e28613cd62bbda4b9d3dc4
-    const response = await axiosInstance.get(`${API}/`);
+    let API = "product";
+    if (id) API += `/${id}`;
+    // http://localhost:5000/product/
+    // http://localhost:5000/product/68e28613cd62bbda4b9d3dc4
+    const response = await axiosInstance.get(`${API}`);
+    
     if (response.data.success) {
       return response.data;
     } else {
       return null;
     }
   } catch (error) {
-    return null;
     console.log(error);
+    return null;
   }
 }
+
+
+
+// async function getProducts(id = null) {
+//   try {
+//     let API = "product";
+//     if (id) API += `/${id}`;
+
+//     const response = await axiosInstance.get(API);
+//     if (response.data.success) return response.data;
+//     return null;
+
+//   } catch (error) {
+//     console.log(error);
+//     return null;
+//   }
+// }
 
 export { getCategories, getColor, getBrand, getProducts };

@@ -11,9 +11,9 @@ const category = {
   async create(req, res) {
     try {
       const categoryImg = req.files.image;
-      // console.log(categoryImg);
+      console.log(categoryImg , "Image");
       // if (!categoryImg) {
-      //   return noContentResponse(res);
+        // return noContentResponse(res);
       // }
 
       // if name and slug is not passed by the user to show error for that

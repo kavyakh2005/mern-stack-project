@@ -27,14 +27,30 @@ server.use('/product',productRouter)
 server.use(express.static('./public'))
 
 
-server.listen(process.env.PORT  , () => {
-  console.log("Server Running at Port NUmber " + process.env.PORT);
-  mongoose
-    .connect(process.env.DATABASE_URL, { dbName: process.env.DB_NAME })
-    .then(() => {
-      console.log("DataBase Connected");
-    })
-    .catch(() => {
-      console.log("unable to connect database");
+// server.listen(process.env.PORT  , () => {
+//   console.log("Server Running at Port NUmber " + process.env.PORT);
+//   mongoose
+//     .connect(process.env.DATABASE_URL, { dbName: process.env.DB_NAME })
+//     .then(() => {
+//       console.log("DataBase Connected");
+//       server.listen(process.env.PORT , ()=>{
+//         console.log("Server Running at Port Number" + process.env.PORT)
+//       })
+//     })
+//     .catch(() => {
+//       console.log("unable to connect database");
+//     });
+// });
+
+
+mongoose
+  .connect(process.env.DATABASE_URL, { dbName: process.env.DB_NAME })
+  .then(() => {
+    console.log("DB Connected");
+    server.listen(process.env.PORT, () => {
+      console.log("Server Running:", process.env.PORT);
     });
-});
+  })
+  .catch((err) => {
+    console.log("DB Connection Failed", err);
+  });

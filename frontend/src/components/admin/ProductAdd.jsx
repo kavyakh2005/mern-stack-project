@@ -17,6 +17,7 @@ import {
 import { MdOutlineCategory, MdSell } from "react-icons/md";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import TextEditor from "./TextEditor";
 
 export default function ProductForm({ category, brand, color }) {
     const router = useRouter();
@@ -25,6 +26,7 @@ export default function ProductForm({ category, brand, color }) {
     const [selColors, setSelColors] = useState([])
     const [selCategory, setSelCategory] = useState(null)
     const [selBrand, setSelBrand] = useState(null)
+    const [longDescription, setLongDescription] = useState("");
 
     const nameRef = useRef();
     const slugRef = useRef();
@@ -38,6 +40,7 @@ export default function ProductForm({ category, brand, color }) {
         slugRef.current.value = slug;
     }
 
+        console.log("long Description ", longDescription)
 
     function priceCalculator() {
         const originalPrice = parseFloat(originalRef.current.value) || 0;
@@ -59,9 +62,12 @@ export default function ProductForm({ category, brand, color }) {
         formData.append("finalPrice", finalPriceRef.current.value);
         formData.append("shortDescription", e.target.shortDescription.value);
         formData.append("longDescription", e.target.longDescription.value);
+        // formData.append("longDescription", longDescription);
         formData.append("categoryID", selCategory?.value);
         formData.append("brandId", selBrand?.value);
-        formData.append("colorID", JSON.stringify(selColors))
+        // formData.append("colorID", JSON.stringify(selColors))
+        formData.append("colorID", JSON.stringify(selColors || []));
+        // formData.append("colors", JSON.stringify(selColors))
         if (e.target.thumbnail.files.length > 0) {
             formData.append("thumbnail", e.target.thumbnail.files[0]);
         }
@@ -155,6 +161,7 @@ export default function ProductForm({ category, brand, color }) {
                         rows="4"
                         className="w-full outline-none text-gray-700 resize-none"
                     ></textarea>
+                    {/* <TextEditor value={longDescription} onChangeHandler={(value)=>setLongDescription(value)}/> */}
                 </div>
 
                 {/* Pricing Section */}
@@ -234,7 +241,7 @@ export default function ProductForm({ category, brand, color }) {
                             name="colorID"
                             onChange={(data) => {
                                 const colorsData = data?.map((item) => item.value)
-                                setSelColors(colorsData)
+                                setSelColors(colorsData)    
                             }}
                             placeholder="Color"
                             className="w-full outline-none text-gray-700 bg-transparent"
@@ -263,21 +270,21 @@ export default function ProductForm({ category, brand, color }) {
 
                 {/* Product Gallery Images */}
                 <div className="border border-gray-300 rounded-lg p-4">
-                    <div className="flex items-center gap-3 mb-3">
+                    {/* <div className="flex items-center gap-3 mb-3">
                         <FaImages className="text-gray-600 text-2xl" />
                         <span className="text-gray-700 font-medium">Product Gallery Images</span>
-                    </div>
+                    </div> */}
 
-                    <input
+                    {/* <input
                         name="images"
                         type="file"
                         multiple
                         accept="image/*"
                         className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100"
-                    />
+                    /> */}
 
                     {/* 5 Image Preview Boxes */}
-                    <div className="flex gap-3 mt-3 flex-wrap">
+                    {/* <div className="flex gap-3 mt-3 flex-wrap">
                         {[...Array(5)].map((_, i) => (
                             <div
                                 key={i}
@@ -290,28 +297,10 @@ export default function ProductForm({ category, brand, color }) {
                                 />
                             </div>
                         ))}
-                    </div>
+                    </div> */}
                 </div>
 
-                {/* Stock & Top Selling */}
-                {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center border border-gray-300 rounded-lg p-2">
-                        <FaBoxOpen className="text-gray-500 text-xl mr-3" />
-                        <input
-                            name="stock"
-                            type="number"
-                            placeholder="Stock Quantity"
-                            className="w-full outline-none text-gray-700"
-                        />
-                    </div>
-
-                    <div className="flex items-center gap-2 border border-gray-300 rounded-lg p-2">
-                        <MdSell className="text-gray-500 text-xl" />
-                        <label className="text-gray-700 flex items-center gap-2">
-                            <input name="topSelling" type="checkbox" /> Top Selling
-                        </label>
-                    </div>
-                </div> */}
+               
 
                 {/* Submit Button */}
                 <button

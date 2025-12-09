@@ -3,6 +3,8 @@ const {
   noContentResponse,
   errorResponse,
   deletedResponse,
+  updatedResponse,
+  serverErrorResponse,
 } = require("../utility/response");
 const { createUniqueName } = require("../utility/helper");
 const fs = require("fs");
@@ -10,7 +12,7 @@ const fs = require("fs");
 const product = {
   async create(req, res) {
     try {
-      console.log(req.body ); 
+      // console.log(req.body );
       const image = req.files.thumbnail;
       // console.log(categoryImg);
       // if (!categoryImg) {
@@ -26,7 +28,7 @@ const product = {
         dicountPercentage,
         finalPrice,
         categoryID,
-        brandId,
+        brandID,
         colorID,
       } = req.body;
 
@@ -76,9 +78,10 @@ const product = {
             dicountPercentage,
             finalPrice,
             categoryID,
-            brandId,
-            colors:JSON.parse(colorID),
+            brandID,
+            colors: JSON.parse(colorID),
             thumbnail,
+            stock: true,
           });
           await product.save();
           return res.status(201).json({
@@ -105,7 +108,11 @@ const product = {
       if (id) {
         product = await productModel.findById(id);
       } else {
-        product = await productModel.find();
+        product = await productModel
+          .find()
+          .populate("categoryID")
+          .populate("brandID")
+          .populate("colors");
       }
 
       if (!product) {
@@ -116,11 +123,108 @@ const product = {
       }
 
       return res.status(200).json({
-        message: "Category Found ",
+        message: "Product Found ",
         success: true,
         data: product,
       });
     } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        message: "Internal Server Error",
+        success: false,
+      });
+    }
+  },
+
+  async status(req, res) {
+    try {
+      const id = req.params.id;
+      const product = await productModel.findById(id);
+
+      await productModel.findByIdAndUpdate(id, { status: !product.status });
+      return res.status(200).json({
+        message: "product Status Updated ",
+        success: true,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Internal Server Error",
+        success: false,
+      });
+    }
+  },
+
+  async stock(req, res) {
+    try {
+      const id = req.params.id;
+      const product = await productModel.findById(id);
+
+      await productModel.findByIdAndUpdate(
+        id,
+        { stock: !product.stock },
+        { new: true }
+      );
+      return res.status(200).json({
+        message: "product Status Updated ",
+        success: true,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Internal Server Error",
+        success: false,
+      });
+    }
+  },
+
+  async topSelling(req, res) {
+    try {
+      const id = req.params.id;
+      const product = await productModel.findById(id);
+
+      await productModel.findByIdAndUpdate(
+        id,
+        { topSelling: !product.topSelling },
+        { new: false }
+      );
+      return res.status(200).json({
+        message: "Product Top Selling Status Updated ",
+        success: true,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Internal Server Error",
+        success: false,
+      });
+    }
+  },
+
+  async images(req, res) {
+    try {
+      const images = req.files.images;
+      const id = req.params.id;
+      const exitingProduct = await productModel.findById(id);
+      const imageArray = exitingProduct.images || [];
+      const allPromise = [];
+      images.map((img) => {
+        const image = createUniqueName(img.name);
+        const destination = "public/images/product/" + image;
+        imageArray.push(image);
+        allPromise.push(img.mv(destination));
+      });
+
+      await Promise.all(allPromise);
+      await productModel.findByIdAndUpdate(id, {
+        $set: { images: imageArray },
+      });
+      // return updatedResponse(res, "Product images updated successfully", imageArray);
+      return res.status(201).json({
+        message: "Product Create",
+        success: true,
+        timestamp: new Date().toISOString(),
+        data: imageArray,
+      });
+    } catch (error) {
+      console.log(error);
       res.status(500).json({
         message: "Internal Server Error",
         success: false,

@@ -31,8 +31,6 @@ const productSchema = new mongoose.Schema(
     },
     dicountPercentage: {
       type: Number,
-      required: true,
-      default: 2,
     },
     finalPrice: {
       type: Number,
@@ -43,7 +41,7 @@ const productSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "Category" /* yeh naam wohi dena hoga jo category model mei diya h */,
     },
-    brandId: {
+    brandID: {
       // here we are referencing brand model
       type: mongoose.Schema.ObjectId,
       ref: "Brand" /* yeh naam wohi dena hoga jo brand model mei diya h */,
@@ -51,31 +49,30 @@ const productSchema = new mongoose.Schema(
     colors: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: "Colors" /* yeh naam wohi dena hoga jo brand model mei diya h */,
-      }
+        ref: "Color" /* yeh naam wohi dena hoga jo brand model mei diya h */,
+      },
     ],
     thumbnail: {
       type: String,
       required: true,
-      default:null,
     },
     images: [
       {
         type: String,
       },
     ],
-    // stock: {
-    //   type: Number,
-    //   required: true,
-    // },
     topSelling: {
       type: Boolean,
       default: false,
     },
-    // status: {
-    //   type: Boolean,
-    //   default: true,
-    // },
+    status: {
+      type: Boolean,
+      default: true,
+    },
+    stock: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );

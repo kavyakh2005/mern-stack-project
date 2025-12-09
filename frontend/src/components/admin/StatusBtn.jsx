@@ -1,11 +1,12 @@
 'use client'
-import { axiosInstance ,notify} from '@/library/helper'
+import { axiosInstance, notify } from '@/library/helper'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
-export default function StatusBtn({ status, id ,url }) {
-    const router =useRouter();
-       function statusHandler() {
+export default function StatusBtn({ status, id, url }) {
+    const router = useRouter();
+
+    function statusHandler() {
         axiosInstance.patch(`${url}/status/${id}`)
             .then((res) => {
                 notify(res.data.message, res.data.success)
