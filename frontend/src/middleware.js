@@ -15,7 +15,7 @@ export function middleware(req) {
         }
     }
     return NextResponse.next();
-}
+} 
 
 // Apply middleware only to /admin routes
 export const config = {

@@ -7,7 +7,10 @@ const server = express();
 server.use(express.json());
 
 const cors = require('cors')
-server.use(cors({origin:"http://localhost:3000"}))
+server.use(cors({origin:"http://localhost:3000" , credentials:true}))
+
+const cookieParser = require('cookie-parser')
+server.use(cookieParser())
 
 // const fileUpload = require("express-fileupload");
 // server.use(fileUpload({ createParentPath: true }));
@@ -21,10 +24,13 @@ server.use('/color',colorRouter)
 const brandRouter = require('../backend/router/brand.router')
 server.use('/brand',brandRouter)
 
-const productRouter = require('../backend/router/product.router')
+const productRouter = require('../backend/router/product.router');
 server.use('/product',productRouter)
 
-server.use(express.static('./public'))
+const adminRouter = require('./router/admin.router');
+server.use('/admin',adminRouter)
+
+server.use(express.static('./public'))  
 
 
 // server.listen(process.env.PORT  , () => {

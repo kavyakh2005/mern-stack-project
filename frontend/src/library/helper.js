@@ -16,4 +16,10 @@ const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
 });
 
-export { createSlug , notify , axiosInstance};
+function getCookies(name){
+  const match = document.cookie.match(new RegExp('(^|)' + name + '=([^;]+)'));
+  if(match) return match[2];
+  return null
+}
+
+export { createSlug , notify , axiosInstance , getCookies};
