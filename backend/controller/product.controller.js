@@ -1,236 +1,236 @@
-const productModel = require("../model/product.model");
-const {
-  noContentResponse,
-  errorResponse,
-  deletedResponse,
-  updatedResponse,
-  serverErrorResponse,
-} = require("../utility/response");
-const { createUniqueName } = require("../utility/helper");
-const fs = require("fs");
+  const productModel = require("../model/product.model");
+  const {
+    noContentResponse,
+    errorResponse,
+    deletedResponse,
+    updatedResponse,
+    serverErrorResponse,
+  } = require("../utility/response");
+  const { createUniqueName } = require("../utility/helper");
+  const fs = require("fs");
 
-const product = {
-  async create(req, res) {
-    try {
-      // console.log(req.body );
-      const image = req.files.thumbnail;
-      // console.log(categoryImg);
-      // if (!categoryImg) {
-      //   return noContentResponse(res);
-      // }
+  const product = {
+    async create(req, res) {
+      try {
+        // console.log(req.body );
+        const image = req.files.thumbnail;
+        // console.log(categoryImg);
+        // if (!categoryImg) {
+        //   return noContentResponse(res);
+        // }
 
-      const {
-        name,
-        slug,
-        shortDescription,
-        longDescription,
-        originalPrice,
-        dicountPercentage,
-        finalPrice,
-        categoryID,
-        brandID,
-        colorID,
-      } = req.body;
+        const {
+          name,
+          slug,
+          shortDescription,
+          longDescription,
+          originalPrice,
+          discountPercentage ,
+          finalPrice,
+          categoryID,
+          brandID,
+          colorID,
+        } = req.body;
 
-      // if name and slug is not passed by the user to show error for that
-      // if (
-      //   !name ||
-      //   !slug ||
-      //   !shortDescription ||
-      //   !longDescription ||
-      //   !originalPrice ||
-      //   !dicountPercentage ||
-      //   !finalPrice ||
-      //   !categoryID ||
-      //   !brandId ||
-      //   !colors
-      // ) {
-      //   return errorResponse(res, "All Fields is required");
-      // }
+        // if name and slug is not passed by the user to show error for that
+        // if (
+        //   !name ||
+        //   !slug ||
+        //   !shortDescription ||
+        //   !longDescription ||
+        //   !originalPrice ||
+        //   !dicountPercentage ||
+        //   !finalPrice ||
+        //   !categoryID ||
+        //   !brandId ||
+        //   !colors
+        // ) {
+        //   return errorResponse(res, "All Fields is required");
+        // }
 
-      // if data is already there and user is trying to create again to show error for that
-      const exitingItem = await productModel.findOne({ name: name });
-      if (exitingItem) {
-        return res
-          .status(400)
-          .json({ message: "categroy already there", success: false });
-      }
-
-      // create a unique name for image
-      const thumbnail = createUniqueName(image.name);
-      // console.log(thumbnail);
-
-      const destination = "public/images/product/" + thumbnail;
-
-      /*This is important code for saving image in database  */
-      image.mv(destination, async (error) => {
-        if (error) {
+        // if data is already there and user is trying to create again to show error for that
+        const exitingItem = await productModel.findOne({ name: name });
+        if (exitingItem) {
           return res
-            .status(500)
-            .json({ message: "File Not Upload ", success: false });
-        } else {
-          const product = await productModel.create({
-            name,
-            slug,
-            shortDescription,
-            longDescription,
-            originalPrice,
-            dicountPercentage,
-            finalPrice,
-            categoryID,
-            brandID,
-            colors: JSON.parse(colorID),
-            thumbnail,
-            stock: true,
-          });
-          await product.save();
-          return res.status(201).json({
-            message: "Product Create",
-            success: true,
-            timestamp: new Date().toISOString(),
-            data: product,
-          });
+            .status(400)
+            .json({ message: "categroy already there", success: false });
         }
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        message: "Internal Server Error",
-        success: false,
-      });
-    }
-  },
 
-  async read(req, res) {
-    try {
-      const id = req.params.id;
-      let product = null;
-      if (id) {
-        product = await productModel.findById(id);
-      } else {
-        product = await productModel
-          .find()
-          .populate("categoryID")
-          .populate("brandID")
-          .populate("colors");
-      }
+        // create a unique name for image
+        const thumbnail = createUniqueName(image.name);
+        // console.log(thumbnail);
 
-      if (!product) {
-        return res.status(404).json({
-          message: "Category Not Found ",
+        const destination = "public/images/product/" + thumbnail;
+
+        /*This is important code for saving image in database  */
+        image.mv(destination, async (error) => {
+          if (error) {
+            return res
+              .status(500)
+              .json({ message: "File Not Upload ", success: false });
+          } else {
+            const product = await productModel.create({
+              name,
+              slug,
+              shortDescription,
+              longDescription,
+              originalPrice,
+              discountPercentage,
+              finalPrice,
+              categoryID,
+              brandID,
+              colors: JSON.parse(colorID),
+              thumbnail,
+              stock: true,
+            });
+            await product.save();
+            return res.status(201).json({
+              message: "Product Create",
+              success: true,
+              timestamp: new Date().toISOString(),
+              data: product,
+            });
+          }
+        });
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({
+          message: "Internal Server Error",
           success: false,
         });
       }
+    },
 
-      return res.status(200).json({
-        message: "Product Found ",
-        success: true,
-        data: product,
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        message: "Internal Server Error",
-        success: false,
-      });
-    }
-  },
+    async read(req, res) {
+      try {
+        const id = req.params.id;
+        let product = null;
+        if (id) {
+          product = await productModel.findById(id);
+        } else {
+          product = await productModel
+            .find()
+            .populate("categoryID")
+            .populate("brandID")
+            .populate("colors");
+        }
 
-  async status(req, res) {
-    try {
-      const id = req.params.id;
-      const product = await productModel.findById(id);
+        if (!product) {
+          return res.status(404).json({
+            message: "Category Not Found ",
+            success: false,
+          });
+        }
 
-      await productModel.findByIdAndUpdate(id, { status: !product.status });
-      return res.status(200).json({
-        message: "product Status Updated ",
-        success: true,
-      });
-    } catch (error) {
-      res.status(500).json({
-        message: "Internal Server Error",
-        success: false,
-      });
-    }
-  },
+        return res.status(200).json({
+          message: "Product Found ",
+          success: true,
+          data: product,
+        });
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({
+          message: "Internal Server Error",
+          success: false,
+        });
+      }
+    },
 
-  async stock(req, res) {
-    try {
-      const id = req.params.id;
-      const product = await productModel.findById(id);
+    async status(req, res) {
+      try {
+        const id = req.params.id;
+        const product = await productModel.findById(id);
 
-      await productModel.findByIdAndUpdate(
-        id,
-        { stock: !product.stock },
-        { new: true }
-      );
-      return res.status(200).json({
-        message: "product Status Updated ",
-        success: true,
-      });
-    } catch (error) {
-      res.status(500).json({
-        message: "Internal Server Error",
-        success: false,
-      });
-    }
-  },
+        await productModel.findByIdAndUpdate(id, { status: !product.status });
+        return res.status(200).json({
+          message: "product Status Updated ",
+          success: true,
+        });
+      } catch (error) {
+        res.status(500).json({
+          message: "Internal Server Error",
+          success: false,
+        });
+      }
+    },
 
-  async topSelling(req, res) {
-    try {
-      const id = req.params.id;
-      const product = await productModel.findById(id);
+    async stock(req, res) {
+      try {
+        const id = req.params.id;
+        const product = await productModel.findById(id);
 
-      await productModel.findByIdAndUpdate(
-        id,
-        { topSelling: !product.topSelling },
-        { new: false }
-      );
-      return res.status(200).json({
-        message: "Product Top Selling Status Updated ",
-        success: true,
-      });
-    } catch (error) {
-      res.status(500).json({
-        message: "Internal Server Error",
-        success: false,
-      });
-    }
-  },
+        await productModel.findByIdAndUpdate(
+          id,
+          { stock: !product.stock },
+          { new: true }
+        );
+        return res.status(200).json({
+          message: "product Status Updated ",
+          success: true,
+        });
+      } catch (error) {
+        res.status(500).json({
+          message: "Internal Server Error",
+          success: false,
+        });
+      }
+    },
 
-  async images(req, res) {
-    try {
-      const images = req.files.images;
-      const id = req.params.id;
-      const exitingProduct = await productModel.findById(id);
-      const imageArray = exitingProduct.images || [];
-      const allPromise = [];
-      images.map((img) => {
-        const image = createUniqueName(img.name);
-        const destination = "public/images/product/" + image;
-        imageArray.push(image);
-        allPromise.push(img.mv(destination));
-      });
+    async topSelling(req, res) {
+      try {
+        const id = req.params.id;
+        const product = await productModel.findById(id);
 
-      await Promise.all(allPromise);
-      await productModel.findByIdAndUpdate(id, {
-        $set: { images: imageArray },
-      });
-      // return updatedResponse(res, "Product images updated successfully", imageArray);
-      return res.status(201).json({
-        message: "Product Create",
-        success: true,
-        timestamp: new Date().toISOString(),
-        data: imageArray,
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        message: "Internal Server Error",
-        success: false,
-      });
-    }
-  },
-};
+        await productModel.findByIdAndUpdate(
+          id,
+          { topSelling: !product.topSelling },
+          { new: false }
+        );
+        return res.status(200).json({
+          message: "Product Top Selling Status Updated ",
+          success: true,
+        });
+      } catch (error) {
+        res.status(500).json({
+          message: "Internal Server Error",
+          success: false,
+        });
+      }
+    },
 
-module.exports = product;
+    async images(req, res) {
+      try {
+        const images = req.files.images;
+        const id = req.params.id;
+        const exitingProduct = await productModel.findById(id);
+        const imageArray = exitingProduct.images || [];
+        const allPromise = [];
+        images.map((img) => {
+          const image = createUniqueName(img.name);
+          const destination = "public/images/product/" + image;
+          imageArray.push(image);
+          allPromise.push(img.mv(destination));
+        });
+
+        await Promise.all(allPromise);
+        await productModel.findByIdAndUpdate(id, {
+          $set: { images: imageArray },
+        });
+        // return updatedResponse(res, "Product images updated successfully", imageArray);
+        return res.status(201).json({
+          message: "Product Create",
+          success: true,
+          timestamp: new Date().toISOString(),
+          data: imageArray,
+        });
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({
+          message: "Internal Server Error",
+          success: false,
+        });
+      }
+    },
+  };
+
+  module.exports = product;

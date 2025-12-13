@@ -1,3 +1,4 @@
+"use client";
 import {
   FaHome, FaShoppingCart, FaPhone, FaTasks, FaSuitcase,
   FaDollarSign, FaComments, FaEnvelope, FaCalendarAlt,
@@ -8,9 +9,26 @@ import { IoIosColorPalette } from "react-icons/io";
 import { TbBrandBooking } from "react-icons/tb";
 import { MdOutlineViewTimeline } from "react-icons/md"; // For Gantt chart
 import { FaProductHunt } from "react-icons/fa";
+import { IoIosLogOut } from "react-icons/io";
 import Link from "next/link";
+import { axiosInstance, notify } from "@/library/helper";
+import { useRouter } from "next/navigation";
 
 export default function SideMenu() {
+  const router = useRouter();
+
+  const logouthandler = () => {
+    axiosInstance.get('admin/logout').then((response) => {
+      notify(response.data.message, response.data.success)
+      router.push('admin-login')
+
+    })  
+    .catch((error)=>{
+      // notify(error?.data?.response,error.data.success)
+      console.log(error)
+    })
+  }
+
   return (
     <div className="w-64 bg-white  flex flex-col">
 
@@ -87,9 +105,9 @@ export default function SideMenu() {
             NEW
           </span>
         </div>
-        <div className="px-4 py-2 flex items-center gap-3 hover:bg-gray-100 cursor-pointer">
-          <FaUsers className="text-lg" />
-          <span>Social</span>
+        <div className="px-4 py-2 flex items-center gap-3 hover:bg-gray-100 cursor-pointer" onClick={logouthandler}>
+          <IoIosLogOut className="text-lg" />
+          <span>Log-Out</span>
         </div>
       </div>
     </div>

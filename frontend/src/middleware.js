@@ -2,10 +2,10 @@ import { NextResponse } from 'next/server';
 
 // Middleware to protect admin routes
 export function middleware(req) {
-    console.log(req.nextUrl)
+    // console.log(req.nextUrl)
     const { pathname } = req.nextUrl;
 
-    console.log(req.cookies.get('admin_token'))
+    // console.log(req.cookies.get('admin_token'))
 
     // Protect routes starting with /admin
     if (pathname.startsWith('/admin')) {

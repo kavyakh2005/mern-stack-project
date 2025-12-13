@@ -1,79 +1,88 @@
-'use client'
-
-import { useState } from "react";
-import { FaShoppingCart, FaBars, FaTimes } from "react-icons/fa";
+import { FaCheckCircle, FaHeart, FaShoppingCart } from "react-icons/fa";
+import { IoIosArrowDown } from "react-icons/io";
 
 export default function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(2); // Example cart count
-
   return (
-    <header className="bg-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <a href="#" className="text-2xl font-bold text-indigo-600">
-              ShopLogo
-            </a>
+    <header className="w-full border-b bg-white">
+      {/* Top Bar */}
+      <div className="flex justify-between items-center px-6 py-2 text-sm text-gray-600">
+        <div className="flex items-center gap-4">
+          <span className="bg-gray-100 px-3 py-1 rounded-md">Hotline 24/7</span>
+          <span>(025) 3886 25 16</span>
+        </div>
+
+        <div className="flex items-center gap-6">
+          <a href="#" className="hover:text-black">Sell on Swoo</a>
+          <a href="#" className="hover:text-black">Order Tracking</a>
+
+          {/* Currency */}
+          <div className="flex items-center gap-1 cursor-pointer">
+            <span>USD</span>
+            <IoIosArrowDown />
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-6">
-            <a href="#" className="text-gray-700 hover:text-indigo-600">Home</a>
-            <a href="#" className="text-gray-700 hover:text-indigo-600">Shop</a>
-            <a href="#" className="text-gray-700 hover:text-indigo-600">About</a>
-            <a href="#" className="text-gray-700 hover:text-indigo-600">Contact</a>
-          </nav>
-
-          {/* Right side: Search + Cart */}
-          <div className="flex items-center space-x-4">
-            {/* Search */}
-            <input
-              type="text"
-              placeholder="Search products..."
-              className="hidden md:block border rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-
-            {/* Cart */}
-            <div className="relative">
-              <FaShoppingCart className="h-6 w-6 text-gray-700 cursor-pointer" />
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </div>
-
-            {/* Mobile menu button */}
-            <button
-              className="md:hidden focus:outline-none"
-              onClick={() => setMenuOpen(!menuOpen)}
-            >
-              {menuOpen ? (
-                <FaTimes className="h-6 w-6 text-gray-700" />
-              ) : (
-                <FaBars className="h-6 w-6 text-gray-700" />
-              )}
-            </button>
+          {/* Language */}
+          <div className="flex items-center gap-1 cursor-pointer">
+            <span role="img" aria-label="usa flag">🇺🇸</span>
+            <span>Eng</span>
+            <IoIosArrowDown />
           </div>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
-      {menuOpen && (
-        <nav className="md:hidden px-4 pb-4 space-y-2">
-          <a href="#" className="block text-gray-700 hover:text-indigo-600">Home</a>
-          <a href="#" className="block text-gray-700 hover:text-indigo-600">Shop</a>
-          <a href="#" className="block text-gray-700 hover:text-indigo-600">About</a>
-          <a href="#" className="block text-gray-700 hover:text-indigo-600">Contact</a>
-          <input
-            type="text"
-            placeholder="Search products..."
-            className="w-full border rounded-md px-3 py-1 mt-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
+      {/* Main Header */}
+      <div className="flex justify-between items-center px-6 py-4">
+        {/* Logo */}
+        <div className="flex items-center gap-2">
+          <div className="bg-green-500 p-2 rounded-lg">
+            <FaCheckCircle className="text-white text-xl" />
+          </div>
+          <div className="leading-tight">
+            <h1 className="text-xl font-bold">SWOO</h1>
+            <p className="text-sm text-gray-600">TECH MART</p>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex items-center gap-8 text-sm font-medium">
+          <div className="flex items-center gap-1 cursor-pointer hover:text-black">
+            HOMES <IoIosArrowDown />
+          </div>
+          <div className="flex items-center gap-1 cursor-pointer hover:text-black">
+            PAGES <IoIosArrowDown />
+          </div>
+          <div className="flex items-center gap-1 cursor-pointer hover:text-black">
+            PRODUCTS <IoIosArrowDown />
+          </div>
+          <a href="#" className="hover:text-black">CONTACT</a>
         </nav>
-      )}
+
+        {/* Right Icons */}
+        <div className="flex items-center gap-6">
+          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer">
+            <FaHeart className="text-gray-500" />
+          </div>
+
+          <div className="text-right">
+            <p className="text-xs text-gray-500">WELCOME</p>
+            <p className="text-sm font-semibold cursor-pointer hover:text-black">
+              LOG IN / REGISTER
+            </p>
+          </div>
+
+          {/* Cart */}
+          <div className="relative flex items-center gap-2 cursor-pointer">
+            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+              <FaShoppingCart className="text-gray-600" />
+            </div>
+            <span className="absolute bottom-2 right-8 bg-green-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+              5
+            </span>
+
+            <p className="font-semibold">$1,689.00</p>
+          </div>
+        </div>
+      </div>
     </header>
   );
 }

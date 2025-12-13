@@ -29,7 +29,7 @@ const productSchema = new mongoose.Schema(
       required: true,
       default: 100,
     },
-    dicountPercentage: {
+    discountPercentage: {
       type: Number,
     },
     finalPrice: {
@@ -48,8 +48,9 @@ const productSchema = new mongoose.Schema(
     },
     colors: [
       {
+      // here we are referencing color model
         type: mongoose.Schema.ObjectId,
-        ref: "Color" /* yeh naam wohi dena hoga jo brand model mei diya h */,
+        ref: "Color" /* yeh naam wohi dena hoga jo color model mei diya h */,
       },
     ],
     thumbnail: {
