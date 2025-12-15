@@ -3,28 +3,31 @@ import React from 'react';
 import Link from 'next/link';
 
 const ColorFilter = async () => {
-    const colorData = await getColor()
+    const colorData = await getColor(null)
     const colors = colorData.data
 
     return (
-        <div className="bg-[#f1f2f6] rounded-lg p-4 w-64 font-sans">
-            <h2 className="font-bold text-lg mb-4">BRANDS</h2>
-        <Link href="/store">
+        <div className="bg-[#f1f2f6] rounded-lg p-4 w-[360px] font-sans">
+            <h2 className="font-bold text-lg mb-4">COLORS</h2>
+            <Link href="/store">
                 <button className="bg-white font-semibold text-sm px-4 py-2 rounded-md shadow-sm mb-4">
-                    All Brands
+                    All Colors
                 </button>
             </Link>
 
 
             <div>
-                <ul className="space-y-1 text-sm text-gray-700">
+                <ul className="flex flex-wrap gap-3 text-sm text-gray-700">
                     {colors.map((item, index) => (
-                        <li key={index} className="cursor-pointer space-y-3 hover:font-bold flex justify-between ">
-                            <Link href={`/store/${item.slug}`}><span> {item.name}</span></Link>
-                            <b>({item.productCount})</b>
+                        <li key={index}>
+                            <div
+                                className="w-8 h-8 rounded-md cursor-pointer"
+                                style={{ backgroundColor: item.hexcode }}
+                            ></div>
                         </li>
                     ))}
                 </ul>
+
             </div>
         </div>
     );

@@ -9,7 +9,7 @@ export const metadata = {
 
 export default async function page() {
   const product = await getProducts();
-  console.log(product)
+  // console.log(product)
   const data = product.data
 
   return (

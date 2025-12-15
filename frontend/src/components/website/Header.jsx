@@ -1,5 +1,6 @@
 import { FaCheckCircle, FaHeart, FaShoppingCart } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
+import Link from "next/link";
 
 export default function Header() {
   return (
@@ -8,7 +9,7 @@ export default function Header() {
       <div className="flex justify-between items-center px-6 py-2 text-sm text-gray-600">
         <div className="flex items-center gap-4">
           <span className="bg-gray-100 px-3 py-1 rounded-md">Hotline 24/7</span>
-          <span>(025) 3886 25 16</span>
+          <span>(+91) 9982521612 </span>
         </div>
 
         <div className="flex items-center gap-6">
@@ -46,13 +47,15 @@ export default function Header() {
         {/* Navigation */}
         <nav className="flex items-center gap-8 text-sm font-medium">
           <div className="flex items-center gap-1 cursor-pointer hover:text-black">
-            HOMES <IoIosArrowDown />
+            <Link href="/">
+              HOMES
+            </Link>
           </div>
           <div className="flex items-center gap-1 cursor-pointer hover:text-black">
-            PAGES <IoIosArrowDown />
+            PAGES 
           </div>
           <div className="flex items-center gap-1 cursor-pointer hover:text-black">
-            PRODUCTS <IoIosArrowDown />
+            <Link href="/store">STORE</Link>
           </div>
           <a href="#" className="hover:text-black">CONTACT</a>
         </nav>

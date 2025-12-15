@@ -3,17 +3,19 @@ const {
   noContentResponse,
   errorResponse,
   deletedResponse,
+  successResponse,
 } = require("../utility/response");
 const { createUniqueName } = require("../utility/helper");
 const fs = require("fs");
+const productModel = require("../model/product.model");
 
 const category = {
   async create(req, res) {
     try {
       const categoryImg = req.files.image;
-      console.log(categoryImg , "Image");
+      console.log(categoryImg, "Image");
       // if (!categoryImg) {
-        // return noContentResponse(res);
+      // return noContentResponse(res);
       // }
 
       // if name and slug is not passed by the user to show error for that
@@ -68,11 +70,22 @@ const category = {
   async read(req, res) {
     try {
       const id = req.params.id;
-      let category = null;
       if (id) {
-        category = await categoryModel.findById(id);
+        const category = await categoryModel.findById(id);
+        return successResponse(res, "category found", category);
       } else {
-        category = await categoryModel.find();
+        const category = await categoryModel.find();
+
+        const data = await Promise.all(
+          category.map(async (cat) => {
+            const productCount = await productModel.countDocuments({
+              categoryID: cat._id,
+            });
+            return { ...cat.toObject(), productCount };
+          })
+        );
+
+        return successResponse(res, "category Found",data)
       }
 
       if (!category) {
@@ -82,11 +95,11 @@ const category = {
         });
       }
 
-      return res.status(200).json({
-        message: "Category Found ",
-        success: true,
-        data: category,
-      });
+      // return res.status(200).json({
+      //   message: "Category Found ",
+      //   success: true,
+      //   data: category,
+      // });
     } catch (error) {
       res.status(500).json({
         message: "Internal Server Error",
@@ -139,7 +152,7 @@ const category = {
       const id = req.params.id;
       // console.log(id);
       // return;
-      const categoryImg = req.files.image || null
+      const categoryImg = req.files.image || null;
       // console.log(categoryImg);
       // if (!categoryImg) {
       //   return noContentResponse(res);
@@ -149,7 +162,7 @@ const category = {
       const { name, slug } = req.body;
 
       // if data is already there and user is trying to create again to show error for that
-      const exitingItem = await categoryModel.findById(id );
+      const exitingItem = await categoryModel.findById(id);
       if (!exitingItem) {
         return res
           .status(400)
@@ -176,7 +189,11 @@ const category = {
             fs.unlinkSync(`public/images/category/${exitingItem.image}`);
             // console.log(update);
             update.image = image;
-            const category = await categoryModel.findByIdAndUpdate(id, { $set : update }, { new: true });
+            const category = await categoryModel.findByIdAndUpdate(
+              id,
+              { $set: update },
+              { new: true }
+            );
             // await category.save();
             return res.status(201).json({
               message: "Category updated successfully",

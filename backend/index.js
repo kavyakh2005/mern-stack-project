@@ -15,20 +15,21 @@ server.use(cookieParser())
 // const fileUpload = require("express-fileupload");
 // server.use(fileUpload({ createParentPath: true }));
 
-const categoryRouter = require('../backend/router/category.router')
+const categoryRouter = require('./router/category.router')
 server.use('/category',categoryRouter)
 
-const colorRouter = require('../backend/router/color.router')
+const colorRouter = require('./router/color.router')
 server.use('/color',colorRouter)
 
-const brandRouter = require('../backend/router/brand.router')
+const brandRouter = require('./router/brand.router')
 server.use('/brand',brandRouter)
 
-const productRouter = require('../backend/router/product.router');
+const productRouter = require('./router/product.router');
 server.use('/product',productRouter)
 
 const adminRouter = require('./router/admin.router');
 server.use('/admin',adminRouter)
+
 
 server.use(express.static('./public'))  
 

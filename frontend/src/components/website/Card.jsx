@@ -48,7 +48,7 @@ export default function ProductCard({ product }) {
       </div>
 
       {/* Add to Cart */}
-      <button className="mt-4 w-full flex items-center justify-center gap-2 bg-black text-white py-3 rounded-xl font-medium hover:bg-gray-900 active:scale-95 transition-all duration-300 shadow-md">
+      <button className="mt-4 w-full flex items-center justify-center gap-2 bg-black text-white py-3 rounded-xl font-medium hover:bg-gray-900 active:scale-95 transition-all duration-300 shadow-md cursor-pointer">
         <FaShoppingCart />
         Add to Cart
       </button>

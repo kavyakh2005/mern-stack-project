@@ -7,7 +7,7 @@ import ColorFilter from "@/components/website/ColorFilter";
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
+      <body className="bg-[#EEEFF6]"
       >
         <div className='max-w-[1360px] bg-white shadow p-7 rounded-[10px] mt-1.5 mx-auto mb-3' >
           Home / Shop / Top Cell Phones & Tablets
@@ -27,10 +27,7 @@ export default function RootLayout({ children }) {
         </div>
         <div className='max-w-[1360px] p-5 mx-auto rounded-[10px] bg-white grid grid-cols-7  gap-5'>
 
-          <div className="col-span-2 space-y-6">
-            {/* <div className="h-[600px] bg-[#EEEFF6] rounded-[10px]"></div>
-            <div></div>
-            <div></div> */}
+          <div className="col-span-2 space-y-6 ">
             <CategoryFilter/>
             <BrandFilter/>
             <ColorFilter/>
@@ -38,7 +35,6 @@ export default function RootLayout({ children }) {
           <div className="col-span-5">
             {children}
           </div>
-
         </div>
 
       </body>
