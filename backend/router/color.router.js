@@ -3,7 +3,7 @@ const { create, read ,deletebyID , status , update} = require("../controller/col
 const authMiddleware = require("../middleware/authmiddleware");
 // const fileupload = require("express-fileupload");
 
-colorRouter.post("/create", authMiddleware, create);
+colorRouter.post("/create",  create);
 colorRouter.get("/:id?", read);
 colorRouter.delete("/delete/:id", deletebyID);
 colorRouter.patch("/status/:id", status);

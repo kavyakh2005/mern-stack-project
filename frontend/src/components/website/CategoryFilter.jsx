@@ -10,7 +10,7 @@ const CategoryFilter = async () => {
         <div className="bg-[#f1f2f6] rounded-lg p-4 w-[360px] font-sans">
             <h2 className="font-bold text-lg mb-4">CATEGORIES</h2>
             <Link href="/store">
-                <button className="bg-white font-semibold text-sm px-4 py-2 rounded-md shadow-sm mb-4">
+                <button className="bg-white font-semibold text-sm px-4 py-2 rounded-md shadow-sm mb-4 cursor-pointer hover:bg-gray-100 w-full">
                     All Categories
                 </button>
             </Link>

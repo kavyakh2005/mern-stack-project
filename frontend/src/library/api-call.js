@@ -57,15 +57,25 @@ async function getBrand(id = null) {
   }
 }
 
-async function getProducts(id = null) {
+async function getProducts(id = null, categorySlug = null , colorSlug = null , brandSlug = null) {
   try {
     let API = "product";
-    if (id) API += `/${id}`;
+    
+    if (id != null) API += `/${id}`;
+
+    const query = new URLSearchParams();
+
+    if (categorySlug) query.append("categorySlug", categorySlug);
+    if (colorSlug) query.append("colorSlug", colorSlug);
+    if(brandSlug) query.append("brandSlug",brandSlug)
+
+    
     // http://localhost:5000/product/
     // http://localhost:5000/product/68e28613cd62bbda4b9d3dc4
-    const response = await axiosInstance.get(`${API}`);
-    
-    if (response.data.success) {
+
+    const response = await axiosInstance.get(API + `?${query.toString()}`);
+
+    if (response.data.success === true) {
       return response.data;
     } else {
       return null;
@@ -75,8 +85,6 @@ async function getProducts(id = null) {
     return null;
   }
 }
-
-
 
 // async function getProducts(id = null) {
 //   try {

@@ -7,6 +7,8 @@ import { axiosInstance } from "@/library/helper";
 import { useRouter } from "next/navigation";
 
 export default function ColorAdd() {
+  // const token = getCookies("admin_token")
+
   const router = useRouter();
   // To Store the data of name which will be used to create slug 
   const nameRef = useRef();
@@ -30,11 +32,7 @@ export default function ColorAdd() {
         hexcode: e.target.hexcode.value
     }
 
-    axiosInstance.post(`color/create`, data,{
-      headers:{
-        Authorization:token
-      }
-    }).then(
+    axiosInstance.post(`color/create`, data ).then(
       (response) => {
         notify(response.data.message, response.data.success)
         if (response.data.success) {
