@@ -106,7 +106,8 @@ const product = {
 
   async read(req, res) {
     try {
-      const { categorySlug, colorSlug, brandSlug } = req.query;
+      const { categorySlug, colorSlug, brandSlug, min, max } = req.query;
+      // console.log(min, max);
       const filterQuery = {};
       const id = req.params.id;
       let product = null;
@@ -134,6 +135,10 @@ const product = {
         filterQuery.brandID = brand._id;
       }
 
+      if (min && max) {
+        filterQuery.finalPrice = { $gte: min, $lte: max };
+      }
+
       // console.log(filterQuery)
 
       if (id) {
@@ -143,7 +148,8 @@ const product = {
           .find(filterQuery)
           .populate("categoryID")
           .populate("brandID")
-          .populate("colors");
+          .populate("colors")
+          .limit(20);
       }
 
       if (!product) {

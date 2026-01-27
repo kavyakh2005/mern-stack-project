@@ -1,6 +1,7 @@
 import CategoryFilter from "@/components/website/categoryFilter";
 import BrandFilter from "@/components/website/BrandFilter";
 import ColorFilter from "@/components/website/ColorFilter";
+import PriceFilter from "@/components/website/PriceFilter";
 
 
 
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
             <CategoryFilter/>
             <BrandFilter/>
             <ColorFilter/>
+            <PriceFilter/>
           </div>
           <div className="col-span-5">
             {children}

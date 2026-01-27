@@ -36,11 +36,7 @@ export default function ModernFormUI() {
     }
 
 
-    axiosInstance.post(`category/create`, formData , {
-      headers:{
-        Authorization:token
-      }
-    }).then(
+    axiosInstance.post(`category/create`, formData ,).then(
       (response) => {
         notify(response.data.message, response.data.success)
         if (response.data.success) {

@@ -1,4 +1,5 @@
 import { FaShoppingCart } from "react-icons/fa";
+import AddToCart from "./AddToCart";
 
 export default function ProductCard({ product }) {
   const { name, thumbnail, originalPrice, finalPrice, discoundPrice, colors } = product;
@@ -68,10 +69,7 @@ export default function ProductCard({ product }) {
       </div>
 
       {/* Add to Cart */}
-      <button className="mt-4 w-full flex items-center justify-center gap-2 bg-black text-white py-3 rounded-xl font-medium hover:bg-gray-900 active:scale-95 transition-all duration-300 shadow-md cursor-pointer">
-        <FaShoppingCart />
-        Add to Cart
-      </button>
+      <AddToCart product={product}/>
     </div>
   );
 }

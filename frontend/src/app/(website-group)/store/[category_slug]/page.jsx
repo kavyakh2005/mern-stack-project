@@ -8,12 +8,16 @@ export const metadata = {
 };
 
 export default async function page({ params , searchParams}) {
+  const resolvedSearchParams = await searchParams; // Await searchParams
 
-    const color = searchParams.color || null 
-    const brand = searchParams.brand || null
+
+    const color = resolvedSearchParams.color || null 
+    const brand = resolvedSearchParams.brand || null
+        const min = resolvedSearchParams?.min || null
+    const max = resolvedSearchParams?.max || null
 
   const category_slug = params.category_slug;
-  const product = await getProducts(null, category_slug , color, brand);
+  const product = await getProducts(null, category_slug , color, brand , min, max);
   const data = product?.data || [];
 
   return (

@@ -1,8 +1,16 @@
+'use client'
+
+import React from "react";
 import { FaCheckCircle, FaHeart, FaShoppingCart } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 
 export default function Header() {
+
+  const cartItems = useSelector((state)=> state.cart);
+  // console.log(cart)
+
   return (
     <header className="w-full border-b bg-white">
       {/* Top Bar */}
@@ -78,11 +86,11 @@ export default function Header() {
             <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
               <FaShoppingCart className="text-gray-600" />
             </div>
-            <span className="absolute bottom-2 right-8 bg-green-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-              5
+            <span className="absolute bottom-5 bg-green-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+              {cartItems.cart ? cartItems.cart.length : 0}
             </span>
 
-            <p className="font-semibold">$1,689.00</p>
+            <p className="font-semibold">₹{cartItems.final_total}</p>
           </div>
         </div>
       </div>
